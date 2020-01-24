@@ -45,16 +45,17 @@ namespace Application
             //PacketBuilder builder = DISTURB(ClassOfService.NetworkControl);
             DateTime now = DateTime.Now;
             now = now.AddMilliseconds(20);
-            while(true)
+            PacketSendBuffer packbuffer;
+            while (true)
             {
-                PacketSendBuffer packbuffer = new PacketSendBuffer(1530000);
-                
+                packbuffer = new PacketSendBuffer(1530000);
                 for (int i = 0; i != 1000; i++)
                 {
                     packbuffer.Enqueue(builder.Build(now));
                     now = now.AddMicroseconds(load);
                 }
                 Communicator.Transmit(packbuffer, true);
+                packbuffer.Dispose();
             }
         }
         public static void SetupInterface()
